@@ -1,0 +1,175 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/bricolage-grotesque';
+@import 'leaflet/dist/leaflet.css';
+
+/*
+ * RaktFlow design tokens.
+ * Brand red is used sparingly: primary actions, live signals and the logo.
+ * Everything else sits on warm neutrals so the red always means something.
+ */
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-blood-50: #fff1f2;
+  --color-blood-100: #ffe0e3;
+  --color-blood-200: #ffc6cc;
+  --color-blood-300: #ff9ba6;
+  --color-blood-400: #fb6173;
+  --color-blood-500: #ee2f47;
+  --color-blood-600: #c8102e;
+  --color-blood-700: #a80c27;
+  --color-blood-800: #8c0e26;
+  --color-blood-900: #771126;
+  --color-blood-950: #420310;
+
+  --color-ink-50: #f7f5f4;
+  --color-ink-100: #edeae8;
+  --color-ink-200: #dcd6d3;
+  --color-ink-300: #bfb6b1;
+  --color-ink-400: #9a8e88;
+  --color-ink-500: #7c706a;
+  --color-ink-600: #635954;
+  --color-ink-700: #4f4743;
+  --color-ink-800: #2e2927;
+  --color-ink-900: #1c1917;
+  --color-ink-950: #0f0c0b;
+
+  --color-paper: #fbf8f6;
+
+  /* Cold-chain / live-tracking accent */
+  --color-ice-50: #ecfeff;
+  --color-ice-100: #cffafe;
+  --color-ice-400: #22d3ee;
+  --color-ice-500: #06b6d4;
+  --color-ice-600: #0891b2;
+  --color-ice-700: #0e7490;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+
+  --shadow-soft: 0 1px 2px rgb(15 12 11 / 0.04), 0 8px 24px -8px rgb(15 12 11 / 0.10);
+  --shadow-lift: 0 2px 4px rgb(15 12 11 / 0.04), 0 24px 48px -16px rgb(15 12 11 / 0.18);
+  --shadow-glow: 0 10px 40px -10px rgb(200 16 46 / 0.55);
+
+  --animate-pulse-ring: pulse-ring 2.2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-heartbeat: heartbeat 1.6s ease-in-out infinite;
+  --animate-ecg: ecg 3s linear infinite;
+
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.7; }
+    80%, 100% { transform: scale(2.4); opacity: 0; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.12); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.08); }
+  }
+  @keyframes ecg {
+    from { stroke-dashoffset: 600; }
+    to { stroke-dashoffset: 0; }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-paper font-sans text-ink-900 antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight text-ink-950;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    @apply bg-blood-600 text-white;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-blood-600;
+  }
+  input, select, textarea, button {
+    font: inherit;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-blood-600 uppercase;
+  }
+  .grain {
+    background-image: radial-gradient(rgb(15 12 11 / 0.06) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+/* Leaflet: match the rest of the UI */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-ink-100);
+}
+.leaflet-control-attribution {
+  font-size: 10px;
+}
+.leaflet-div-icon {
+  background: transparent;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  header, footer, nav, .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}
+
+/* Glide the delivery rider between 1-second position updates */
+.leaflet-marker-icon.rider-marker {
+  transition: transform 1s linear;
+}
+.leaflet-zoom-anim .leaflet-marker-icon.rider-marker {
+  transition: none;
+}

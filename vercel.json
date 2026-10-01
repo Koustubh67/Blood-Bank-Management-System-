@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/eraktkosh/:path*", "destination": "https://eraktkosh.mohfw.gov.in/eraktkoshPortal/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
